@@ -23,6 +23,12 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	/** Fires a projectile. */
+	void OnFire();
+
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class ABallProjectile> ProjectileClass;
@@ -36,19 +42,9 @@ public:
 	class UAnimMontage* FireAnimation;
 
 	/** The animation object for the arms mesh */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimInstance* AnimInstance;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-protected:
-	/** Fires a projectile. */
-	void OnFire();
-	
 };

@@ -7,6 +7,7 @@
 #include "FirstPersonCharacter.generated.h"
 
 class UInputComponent;
+class AGun;
 
 UCLASS(config=Game)
 class AFirstPersonCharacter : public ACharacter
@@ -20,6 +21,11 @@ class AFirstPersonCharacter : public ACharacter
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AGun> GunBlueprint;
+
+	AGun* Gun = nullptr;
 
 public:
 	AFirstPersonCharacter();
