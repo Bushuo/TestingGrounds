@@ -45,8 +45,6 @@ public:
 
 
 protected:
-	/** Fires a projectile. */
-	void OnFire();
 
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);
