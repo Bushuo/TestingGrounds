@@ -12,7 +12,7 @@ AMannequin::AMannequin()
 	PrimaryActorTick.bCanEverTick = true;
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	Camera->SetupAttachment(RootComponent);
-	Camera->RelativeLocation = FVector(0.f, 0.f, 60.5f);
+	Camera->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
 	Camera->bUsePawnControlRotation = true;
 
 	FPArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
@@ -20,6 +20,8 @@ AMannequin::AMannequin()
 	FPArms->SetupAttachment(Camera);
 	FPArms->bCastDynamicShadow = false;
 	FPArms->CastShadow = false;
+	FPArms->RelativeRotation = FRotator(1.9f, -19.19f, 5.2f);
+	FPArms->RelativeLocation = FVector(-0.5f, -4.4f, -155.7f);
 }
 
 // Called when the game starts or when spawned
@@ -30,36 +32,6 @@ void AMannequin::BeginPlay()
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint);
 	Gun->AttachToComponent(FPArms, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	Gun->AnimInstance = FPArms->GetAnimInstance();
-}
-
-void AMannequin::MoveForward(float Val)
-{
-	if (Val != 0.0f)
-	{
-		// add movement in that direction
-		AddMovementInput(GetActorForwardVector(), Val);
-	}
-}
-
-void AMannequin::MoveRight(float Value)
-{
-	if (Value != 0.0f)
-	{
-		// add movement in that direction
-		AddMovementInput(GetActorRightVector(), Value);
-	}
-}
-
-void AMannequin::TurnAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
-}
-
-void AMannequin::LookUpAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AMannequin::Fire()
@@ -77,23 +49,5 @@ void AMannequin::Tick(float DeltaTime)
 // Called to bind functionality to input
 void AMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	check(PlayerInputComponent);
-
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMannequin::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMannequin::StopJumping);
-	// Bind fire event
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMannequin::Fire);
-
-	// Bind movement events
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMannequin::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMannequin::MoveRight);
-
-	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
-	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn", this, &AMannequin::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &AMannequin::TurnAtRate);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &AMannequin::LookUpAtRate);
-
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
